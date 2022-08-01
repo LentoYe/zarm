@@ -148,15 +148,6 @@
   // 动画
   @include define(animation-duration-base, 0.2s);
 
-  // Carousel
-  --za-carousel-pagination-distance: 8px;
-  --za-carousel-pagination-rect-width: 19px;
-  --za-carousel-pagination-rect-height: 4px;
-  --za-carousel-pagination-rect-border-radius: 1px;
-  --za-carousel-pagination-rect-step: 2px;
-  --za-carousel-pagination-rect-color: rgba(255, 255, 255, 0.6);
-  --za-carousel-pagination-rect-color-active: #fff;
-
   // Collapse
   --za-collapse-height: 52px;
   --za-collapse-padding-horizontal: 16px;
