@@ -185,31 +185,10 @@ const Tabs = React.forwardRef<unknown, TabsProps>((props, ref) => {
   // 渲染选项
   const tabsRender = React.Children.map(children, renderTabs);
 
-    return {
-      ...styleUl,
-      ...itemSize,
-    };
-  };
-
-  /**
-   * @description: 计算滚动条移动位置
-   */
-  calculateScorllLeftLocation = () => {
-    const { scrollable } = this.props;
-    if (!scrollable) {
-      return false;
-    }
-    const value = this.currentValue;
-    if (scrollable && this.layout && this.layout.childNodes[value]) {
-      const {
-        offsetWidth: layoutOffsetWidth = 0,
-        offsetHeight: layoutOffsetHeight = 0,
-      } = this.layout;
-      const curTab = this.layout.childNodes[value] as HTMLElement;
-      const left = curTab.offsetLeft + curTab.offsetWidth / 2 - layoutOffsetWidth / 2;
-      const top = curTab.offsetTop + curTab.offsetHeight / 2 - layoutOffsetHeight / 2;
-
-      scrollTo(this.layout, top, left, 0.3);
+  const getItemStyle = (el, prop) => {
+    let newValue = '0';
+    if (prop in el.style) {
+      newValue = el.style[prop] || window.getComputedStyle(el).getPropertyValue(prop) || '0';
     }
     return newValue;
   };

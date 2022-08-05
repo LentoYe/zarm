@@ -7,8 +7,11 @@ export type TriggerProps = BaseTriggerProps;
 
 const Trigger: React.FC<TriggerProps> & {
   instanceList: TriggerProps['onClose'][];
+  count: number;
 } = (props) => {
   const { visible, onClose, disabled } = props;
+
+  console.log(Trigger.instanceList);
 
   // execute callback function, KeyboardEvent.keycode was not recommended in MDN
   const onKeydown = (e: KeyboardEvent) => {
@@ -36,16 +39,20 @@ const Trigger: React.FC<TriggerProps> & {
   }, [visible, disabled, onClose]);
 
   useEffect(() => {
-    if (Trigger.instanceList.length === 1) {
+    if (Trigger.count === 0) {
       Events.on(document.body, 'keydown', onKeydown);
     }
+    Trigger.count += 1;
 
     return () => {
       const index = Trigger.instanceList.findIndex((c) => c === onClose);
       if (index > -1) {
         Trigger.instanceList.splice(index, 1);
       }
-      Events.off(document.body, 'keydown', onKeydown);
+      Trigger.count -= 1;
+      if (Trigger.count === 0) {
+        Events.off(document.body, 'keydown', onKeydown);
+      }
     };
   }, []);
 
@@ -58,5 +65,6 @@ Trigger.defaultProps = {
 };
 
 Trigger.instanceList = [];
+Trigger.count = 0;
 
 export default Trigger;
