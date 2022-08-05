@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { transform } from '@babel/standalone';
 import { Panel } from 'zarm';
 import * as ZarmDesignIcons from '@zarm-design/icons';
-import enUS from 'zarm/config-provider/locale/en_US';
-import zhCN from 'zarm/config-provider/locale/zh_CN';
+import enUS from 'zarm/n-config-provider/locale/en_US';
+import zhCN from 'zarm/n-config-provider/locale/zh_CN';
 import 'zarm/style/entry';
 
 export default ({ location, globalContext, children }) => {
@@ -22,6 +22,7 @@ export default ({ location, globalContext, children }) => {
           en_US: enUS,
           zh_CN: zhCN,
         };
+
         const args = [
           'context',
           'React',
@@ -39,6 +40,15 @@ export default ({ location, globalContext, children }) => {
         };
       })
       .then(({ args, argv }) => {
+        const renderTpl = `ReactDOM.render(
+          <Zarm.NConfigProvider primaryColor={GlobalContext.primaryColor} theme={GlobalContext.theme} locale={Locale[GlobalContext.locale === 'zhCN' ? 'zh_CN' : 'en_US']}>
+            <Zarm.ConfigProvider primaryColor={GlobalContext.primaryColor} theme={GlobalContext.theme} locale={Locale[GlobalContext.locale === 'zhCN' ? 'zh_CN' : 'en_US']}>
+              $1
+            </Zarm.ConfigProvider>
+          </Zarm.NConfigProvider>,
+          document.getElementById('${containerId}'),
+        )`;
+
         const value = source[2]
           .replace(/import\s+\{\s+(.*)\s+\}\s+from\s+'react';/, 'const { $1 } = React;')
           .replace(/import\s+\{\s+(.*)\s+\}\s+from\s+'zarm';/, 'const { $1 } = Zarm;')
@@ -50,12 +60,13 @@ export default ({ location, globalContext, children }) => {
             /import\s+(.*)\s+from\s+'zarm\/lib\/config-provider\/locale\/(.*)';/g,
             "const $1 = Locale['$2'];",
           )
+          .replace(
+            /import\s+(.*)\s+from\s+'zarm\/lib\/n-config-provider\/locale\/(.*)';/g,
+            "const $1 = Locale['$2'];",
+          )
           // 替换格式
           // ReactDOM.render(<Demo />, mountNode);
-          .replace(
-            /ReactDOM.render\(\s?([^]+?)(,\s?mountNode\s?\))/g,
-            `ReactDOM.render($1, document.getElementById('${containerId}'))`,
-          )
+          .replace(/ReactDOM.render\(\s?([^]+?)(,\s?mountNode\s?\))/g, renderTpl)
           // 替换格式
           // ReactDOM.render(
           //   <>
@@ -64,10 +75,7 @@ export default ({ location, globalContext, children }) => {
           //   </>,
           //   mountNode,
           // );
-          .replace(
-            /ReactDOM.render\(\s?([^]+?)(,([\r\n])(\s)*mountNode,(\s)*\))/g,
-            `ReactDOM.render($1, document.getElementById('${containerId}'))`,
-          );
+          .replace(/ReactDOM.render\(\s?([^]+?)(,([\r\n])(\s)*mountNode,(\s)*\))/g, renderTpl);
 
         const { code } = transform(value, {
           presets: ['es2015', 'react'],

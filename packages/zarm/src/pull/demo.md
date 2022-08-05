@@ -4,7 +4,7 @@
 
 ```jsx
 import { useState, useEffect, useRef } from 'react';
-import { Pull, Cell, Message, Button, ActivityIndicator, BackToTop } from 'zarm';
+import { Pull, List, Message, Button, ActivityIndicator, BackTop } from 'zarm';
 import { WarningCircle, SuccessCircle, CloseCircle } from '@zarm-design/icons';
 
 const REFRESH_STATE = {
@@ -35,7 +35,7 @@ const fetchData = (length, dataSource = []) => {
   let newData = [].concat(dataSource);
   const startIndex = newData.length;
   for (let i = startIndex; i < startIndex + length; i++) {
-    newData.push(<Cell key={+i}>第 {i + 1} 行</Cell>);
+    newData.push(<List.Item key={+i} title={`第 ${i + 1} 行`} />);
   }
   return newData;
 };
@@ -187,9 +187,9 @@ const Demo = () => {
           // },
         }}
       >
-        {dataSource}
+        <List>{dataSource}</List>
       </Pull>
-      <BackToTop scrollContainer={scrollContainer} onClick={() => console.log('click back to top')}>
+      <BackTop scrollContainer={scrollContainer} onClick={() => console.log('click back to top')}>
         <div
           style={{
             width: 60,
@@ -206,7 +206,7 @@ const Demo = () => {
         >
           Up
         </div>
-      </BackToTop>
+      </BackTop>
     </>
   );
 };

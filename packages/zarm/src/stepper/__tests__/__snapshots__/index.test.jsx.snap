@@ -12,7 +12,6 @@ exports[`Stepper defaultValue 1`] = `
     htmlType="button"
     loading={false}
     onClick={[Function]}
-    prefixCls="za-button"
     shadow={false}
     shape="radius"
     size="xs"
@@ -21,12 +20,16 @@ exports[`Stepper defaultValue 1`] = `
     <ForwardRef(SvgMinus) />
   </Button>
   <Input
+    autoFocus={false}
+    autoHeight={false}
     className="za-stepper__input "
     clearable={false}
     disabled={false}
     onBlur={[Function]}
     onChange={[Function]}
-    type="text"
+    readOnly={false}
+    showLength={false}
+    type="number"
     value={2}
   />
   <Button
@@ -37,7 +40,6 @@ exports[`Stepper defaultValue 1`] = `
     htmlType="button"
     loading={false}
     onClick={[Function]}
-    prefixCls="za-button"
     shadow={false}
     shape="radius"
     size="xs"
@@ -54,13 +56,12 @@ exports[`Stepper renders correctly 1`] = `
 >
   <button
     aria-disabled="false"
-    class="za-button za-stepper__sub za-button--default za-button--xs za-button--radius"
+    class="za-button za-button--default za-button--xs za-button--radius za-stepper__sub"
     type="button"
   >
     <span>
       <i
-        class="za-icon za-icon--default za-icon--md"
-        theme="default"
+        class="za-icon"
       >
         <svg
           aria-hidden="true"
@@ -82,20 +83,18 @@ exports[`Stepper renders correctly 1`] = `
     class="za-input za-stepper__input "
   >
     <input
-      autocomplete="off"
-      type="text"
+      type="number"
       value="0"
     />
   </div>
   <button
     aria-disabled="false"
-    class="za-button za-stepper__plus za-button--default za-button--xs za-button--radius"
+    class="za-button za-button--default za-button--xs za-button--radius za-stepper__plus"
     type="button"
   >
     <span>
       <i
-        class="za-icon za-icon--default za-icon--md"
-        theme="default"
+        class="za-icon"
       >
         <svg
           aria-hidden="true"

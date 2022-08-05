@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { render, mount, shallow } from 'enzyme';
+import { render, shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import RadioGroup from '../RadioGroup';
 import Radio from '../index';
@@ -38,9 +38,9 @@ describe('Radio', () => {
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 
-  it('type is cell', () => {
+  it('type is list', () => {
     const wrapper = render(
-      <Radio type="cell" value="0">
+      <Radio type="list" value="0">
         选项一
       </Radio>,
     );
@@ -72,149 +72,45 @@ describe('Radio', () => {
 });
 
 describe('Radio.Group', () => {
-  describe('#getDerivedStateFromProps', () => {
-    it('should get derived state from props correctly', () => {
-      const props = { value: 1 };
-      const state = RadioGroup.getDerivedStateFromProps(props);
-      expect(state).toEqual({ value: 1 });
-    });
-    it('should return null if  value field not in props', () => {
-      const props = {};
-      const state = RadioGroup.getDerivedStateFromProps(props);
-      expect(state).toBeNull();
-    });
-  });
-
-  describe('#getValue', () => {
-    it('should get initial state from props correctly if props has value field', () => {
-      const wrapper = shallow(<RadioGroup value={1} />);
-      expect(wrapper.state()).toEqual({ value: 1 });
-    });
-    it('should get initial state from props correctly if props has defaultValue field', () => {
-      const wrapper = shallow(<RadioGroup defaultValue={1} />);
-      expect(wrapper.state()).toEqual({ value: 1 });
-    });
-
-    it('should get null', () => {
-      const wrapper = shallow(<RadioGroup />);
-      expect(wrapper.state()).toEqual({ value: null });
-    });
-  });
-
-  describe('#getChildChecked', () => {
-    it('should get initial state from props correctly if component has single child', () => {
-      const wrapper = shallow(
-        <RadioGroup>
-          <TestRadio checked value={233} />
-        </RadioGroup>,
-      );
-      expect(wrapper.state()).toEqual({ value: 233 });
-    });
-
-    it('should get initial state from props correctly if component has children', () => {
-      const wrapper = shallow(
-        <RadioGroup>
-          <TestRadio checked value={233} />
-          <TestRadio checked value={222} />
-        </RadioGroup>,
-      );
-      expect(wrapper.state()).toEqual({ value: 222 });
-    });
-
-    it('should get initial state from props correctly if component has invalid React element child', () => {
-      const wrapper = shallow(
-        <RadioGroup>
-          <TestRadio checked={false} value={110} />
-        </RadioGroup>,
-      );
-      expect(wrapper.state()).toEqual({ value: null });
-    });
-  });
-
   it('should render with children', () => {
     const wrapper = shallow(
-      <RadioGroup id="test-radio-group">
+      <RadioGroup>
         <TestRadio value={1} checked={false} />
         <TestRadio value={2} checked={false} />
       </RadioGroup>,
     );
     expect(wrapper.find('.za-radio-group__inner').children()).toHaveLength(2);
-    expect(wrapper.prop('id')).toEqual('test-radio-group');
   });
 
   it('should render with cloned react element correctly', () => {
     const wrapper = shallow(
-      <RadioGroup id="test-radio-group" type="button">
+      <RadioGroup type="button">
         <TestRadio value={1} />
         <TestRadio value={2} />
       </RadioGroup>,
     );
     expect(wrapper.find(TestRadio).at(0).props()).toEqual({
+      buttonGhost: false,
+      buttonShape: 'radius',
+      buttonSize: 'xs',
       value: 1,
       checked: false,
       type: 'button',
-      shape: 'radius',
+      listMarkerAlign: 'before',
       disabled: false,
       onChange: expect.any(Function),
     });
     expect(wrapper.find(TestRadio).at(1).props()).toEqual({
+      buttonGhost: false,
+      buttonShape: 'radius',
+      buttonSize: 'xs',
       value: 2,
       checked: false,
       type: 'button',
-      shape: 'radius',
+      listMarkerAlign: 'before',
       disabled: false,
       onChange: expect.any(Function),
     });
-  });
-
-  it('should handle onChange event on radio group component', () => {
-    const onChange = jest.fn();
-    const wrapper = mount(
-      <RadioGroup id="test-radio-group" onChange={onChange}>
-        <TestRadio value={1} checked={false} />
-        <TestRadio value={2} checked={false} />
-      </RadioGroup>,
-    );
-    expect(wrapper.state('value')).toBeNull();
-    const input = wrapper.find('.za-radio-group__inner').children().at(0).find('input');
-    expect(input.props()).toEqual(
-      expect.objectContaining({
-        value: 1,
-        checked: false,
-        type: undefined,
-        shape: 'radius',
-        disabled: false,
-        onChange: expect.any(Function),
-      }),
-    );
-    input.simulate('change');
-    expect(onChange).toBeCalledWith(1);
-    expect(wrapper.state('value')).toEqual(1);
-  });
-
-  it('should handle onChange event on the children', () => {
-    const onChange1 = jest.fn();
-    const onChange2 = jest.fn();
-    const wrapper = mount(
-      <RadioGroup id="test-radio-group">
-        <TestRadio value={1} checked={false} onChange={onChange1} />
-        <TestRadio value={2} checked={false} onChange={onChange2} />
-      </RadioGroup>,
-    );
-    expect(wrapper.state('value')).toBeNull();
-    const input = wrapper.find('.za-radio-group__inner').children().at(0).find('input');
-    expect(input.props()).toEqual({
-      value: 1,
-      checked: false,
-      type: undefined,
-      shape: 'radius',
-      disabled: false,
-      onChange: expect.any(Function),
-    });
-    input.simulate('change');
-    expect(onChange1).toBeCalledTimes(1);
-    expect(onChange2).not.toBeCalled();
-    expect(wrapper.state('value')).toEqual(1);
   });
 
   it('renders correctly', () => {
@@ -264,27 +160,27 @@ describe('Radio.Group', () => {
   });
 
   // 圆角
-  it('shape is radius', () => {
+  it('buttonShape is radius', () => {
     const wrapper = shallow(
-      <Radio.Group shape="radius">
+      <Radio.Group buttonShape="radius">
         <Radio value="0">选项一</Radio>
         <Radio value="1">选项二</Radio>
         <Radio value="2">选项三</Radio>
       </Radio.Group>,
     );
-    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--radius')).toBe(true);
+    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--button-radius')).toBe(true);
   });
 
   // 椭圆角
-  it('shape is round', () => {
+  it('buttonShape is round', () => {
     const wrapper = shallow(
-      <Radio.Group shape="round">
+      <Radio.Group buttonShape="round">
         <Radio value="0">选项一</Radio>
         <Radio value="1">选项二</Radio>
         <Radio value="2">选项三</Radio>
       </Radio.Group>,
     );
-    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--round')).toBe(true);
+    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--button-round')).toBe(true);
   });
 
   // 块级样式
@@ -300,9 +196,9 @@ describe('Radio.Group', () => {
   });
 
   // 列表样式
-  it('type is cell', () => {
+  it('type is list', () => {
     const wrapper = shallow(
-      <Radio.Group type="cell">
+      <Radio.Group type="list">
         <Radio value="0">选项一</Radio>
         <Radio value="1">选项二</Radio>
         <Radio value="2" disabled>
@@ -310,13 +206,13 @@ describe('Radio.Group', () => {
         </Radio>
       </Radio.Group>,
     );
-    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--cell')).toBe(true);
+    expect(wrapper.find('.za-radio-group').hasClass('za-radio-group--list')).toBe(true);
   });
 
   it('radio group onChange event', () => {
     const onChange = jest.fn();
     const wrapper = shallow(
-      <Radio.Group shape="round" onChange={onChange}>
+      <Radio.Group buttonShape="round" onChange={onChange}>
         <Radio value="0">选项一</Radio>
         <Radio value="1">选项二</Radio>
         <Radio value="2" disabled>

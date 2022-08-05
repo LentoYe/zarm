@@ -6,10 +6,10 @@ import {
   TouchableWithoutFeedback,
   GestureResponderEvent,
 } from 'react-native';
-import PropsType from './PropsType';
+import { BaseMaskProps } from './interface';
 import maskStyle from './style/index.native';
 
-export interface MaskProps extends PropsType {
+export interface MaskProps extends BaseMaskProps {
   style?: CSSProperties;
   styles?: typeof maskStyle;
   onClick?: (event: GestureResponderEvent) => void;
@@ -20,14 +20,14 @@ const maskStyles = StyleSheet.create<any>(maskStyle);
 export default class Mask extends PureComponent<MaskProps, any> {
   static defaultProps = {
     visible: false,
-    type: 'normal',
+    color: 'normal',
     styles: maskStyles,
   };
 
   render() {
-    const { visible, styles, type, style, onClick } = this.props;
+    const { visible, styles, color, style, onClick } = this.props;
 
-    const popupCls = [styles!.wrapperStyle, styles![`${type}Wrapper`], style] as ViewStyle;
+    const popupCls = [styles!.wrapperStyle, styles![`${color}Wrapper`], style] as ViewStyle;
 
     return (
       visible && (

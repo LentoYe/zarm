@@ -1,9 +1,9 @@
 import React, { PureComponent, CSSProperties } from 'react';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
-import PropsType from './PropsType';
+import type { BaseBadgeProps } from './interface';
 import badgeStyle from './style/index.native';
 
-export interface BadgeProps extends PropsType {
+export interface BadgeProps extends BaseBadgeProps {
   style?: CSSProperties;
   styles?: typeof badgeStyle;
 }
@@ -32,7 +32,7 @@ export default class Badge extends PureComponent<BadgeProps, {}> {
   };
 
   render() {
-    const { theme, shape, text, style, children, styles } = this.props;
+    const { shape, text, style, children, styles } = this.props;
     const { dotWidth } = this.state;
 
     const bagdeWrapper = [styles!.textStyle, style] as ViewStyle;
@@ -45,7 +45,6 @@ export default class Badge extends PureComponent<BadgeProps, {}> {
 
     const iconStyle = [
       styles![`${shape}Badge`],
-      styles![`${theme}Bagde`],
       !!children && [badgeStyles.sup],
       shape === undefined && styles!.dotBadge,
     ] as ViewStyle;

@@ -3,28 +3,53 @@
 exports[`KeyboardPicker snapshot renders correctly 1`] = `
 <KeyboardPicker
   destroy={true}
-  prefixCls="za-keyboard-picker"
   type="number"
   visible={false}
 >
-  <ForwardRef(ForwardedRefComp)
+  <Popup
+    animationDuration={200}
+    className="za-keyboard-picker"
     destroy={true}
+    direction="bottom"
+    lockScroll={true}
     mask={false}
     visible={false}
   >
-    <WarnIfDeprecatedComp
-      destroy={true}
-      forwardedRef={null}
-      mask={false}
-      visible={false}
+    <CSSTransition
+      classNames="za-slide-up"
+      in={false}
+      mountOnEnter={true}
+      nodeRef={
+        Object {
+          "current": null,
+        }
+      }
+      onEnter={[Function]}
+      onExited={[Function]}
+      timeout={200}
+      unmountOnExit={true}
     >
-      <Popup
-        destroy={true}
-        mask={false}
-        prefixCls="za-popup"
-        visible={false}
+      <Transition
+        appear={false}
+        enter={true}
+        exit={true}
+        in={false}
+        mountOnEnter={true}
+        nodeRef={
+          Object {
+            "current": null,
+          }
+        }
+        onEnter={[Function]}
+        onEntered={[Function]}
+        onEntering={[Function]}
+        onExit={[Function]}
+        onExited={[Function]}
+        onExiting={[Function]}
+        timeout={200}
+        unmountOnExit={true}
       />
-    </WarnIfDeprecatedComp>
-  </ForwardRef(ForwardedRefComp)>
+    </CSSTransition>
+  </Popup>
 </KeyboardPicker>
 `;

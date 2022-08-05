@@ -1,23 +1,96 @@
-import React, { PureComponent, HTMLAttributes } from 'react';
-import classnames from 'classnames';
-import PropsType from './PropsType';
+import * as React from 'react';
+import { createBEM } from '@zarm-design/bem';
+import { CSSTransition } from 'react-transition-group';
+import isFinite from 'lodash/isFinite';
+import { ConfigContext } from '../n-config-provider';
+import type { BaseMaskProps } from './interface';
+import type { HTMLProps } from '../utils/utilityTypes';
+import { renderToContainer } from '../utils/dom';
 
-export interface MaskProps extends HTMLAttributes<HTMLDivElement>, PropsType {
-  prefixCls?: string;
+const OpacityList = {
+  normal: 0.55,
+  light: 0.35,
+  dark: 0.75,
+};
+
+export interface MaskCssVars {
+  '--z-index'?: React.CSSProperties['zIndex'];
 }
 
-export default class Mask extends PureComponent<MaskProps, {}> {
-  static defaultProps: MaskProps = {
-    prefixCls: 'za-mask',
-    visible: false,
-    type: 'normal',
+export type MaskProps = BaseMaskProps &
+  HTMLProps<MaskCssVars> & {
+    onClick: React.MouseEventHandler<HTMLDivElement>;
   };
 
-  render() {
-    const { prefixCls, className, visible, type, ...others } = this.props;
-    const markCls = classnames(prefixCls, className, {
-      [`${prefixCls}--${type}`]: !!type,
-    });
-    return visible && <div className={markCls} {...others} />;
-  }
-}
+const Mask = React.forwardRef<HTMLDivElement, MaskProps>((props, ref) => {
+  const {
+    className,
+    style,
+    visible,
+    color,
+    opacity,
+    forceRender,
+    destroy,
+    onClick,
+    children,
+    mountContainer,
+    ...rest
+  } = props;
+  const nodeRef = React.useRef<HTMLDivElement>(null);
+  const [animatedVisible, setAnimatedVisible] = React.useState(visible);
+  const { prefixCls, ...context } = React.useContext(ConfigContext);
+  const bem = createBEM('mask', { prefixCls });
+
+  const rgb = color === 'black' ? '0, 0, 0' : '255, 255, 255';
+  const backgroundOpacity = isFinite(opacity) ? opacity : OpacityList[opacity!];
+
+  const maskStyle = {
+    ...style,
+    display: !visible && !animatedVisible ? 'none' : undefined,
+    backgroundColor: color === 'transparent' ? 'transparent' : `rgba(${rgb}, ${backgroundOpacity})`,
+  };
+
+  React.useImperativeHandle(ref, () => nodeRef.current!);
+
+  return (
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={visible}
+      timeout={300}
+      classNames={`${prefixCls}-fade`}
+      mountOnEnter={!forceRender}
+      unmountOnExit={destroy}
+      onEnter={() => {
+        setAnimatedVisible(true);
+      }}
+      onExited={() => {
+        setAnimatedVisible(false);
+      }}
+    >
+      {() =>
+        renderToContainer(
+          mountContainer ?? context.mountContainer,
+          <div
+            {...rest}
+            ref={nodeRef}
+            className={bem([className])}
+            style={maskStyle}
+            onClick={onClick}
+          >
+            {children}
+          </div>,
+        )
+      }
+    </CSSTransition>
+  );
+});
+
+Mask.displayName = 'Mask';
+
+Mask.defaultProps = {
+  visible: false,
+  color: 'black',
+  opacity: 'normal',
+};
+
+export default Mask;

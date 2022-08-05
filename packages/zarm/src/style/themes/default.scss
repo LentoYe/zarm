@@ -6,27 +6,29 @@
   @include defineColorHSL(--theme-success, 156, 100%, 36.9%);
   @include defineColorHSL(--theme-warning, 31, 83.1%, 55.9%);
   @include defineColorHSL(--theme-danger, 0, 100%, 65.7%);
+  @include defineColorHSL(--theme-danger, 0, 100%, 65.7%);
 
   // 文字色
-  --color-text: #343434;                    // 基本
-  --color-text-inverse: #fff;               // 反色
-  --color-text-placeholder: #a9a9a9;        // 文本框提示
-  --color-text-disabled: #bcbcbc;           // 失效
-  --color-text-caption: #909090;            // 辅助描述
-  --color-link: var(--theme-primary);         // 链接
-  --color-shadow: rgba(56, 56, 56, 0.15);   // 阴影色
+  --color-text: #343434;                             // 基本
+  --color-text-inverse: #fff;                        // 反色
+  --color-text-placeholder: rgba(128, 128, 132, 0.3); // 文本框提示
+  --color-text-disabled: #bcbcbc;                    // 失效
+  --color-text-caption: #909090;                     // 辅助描述
+  --color-link: var(--theme-primary);                  // 链接
+  --color-shadow: rgba(56, 56, 56, 0.15);            // 阴影色
 
   // 背景色
-  --background-active: #e6e6e6;
+  --background-color: #fff;
+  --background-active: #d4d4d4;
   --background-disabled: #f2f2f2;
 
   // 边框色
-  --border-color: #dcdcdc;
+  --border-color: #c5c5c5;
   --border-disabled: #e6e6e6;
 
   // 圆角
-  --radius-xs: 2px;
-  --radius-sm: 2px;
+  --radius-xs: 4px;
+  --radius-sm: 4px;
   --radius-md: 4px;
   --radius-lg: 8px;
   --radius-xl: 8px;
@@ -48,20 +50,21 @@
   --padding-v-xl: 18px;
 
   // 字体大小
-  --font-size-xs: 10px;
-  --font-size-sm: 12px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 18px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 17px;
+  --font-size-lg: 20px;
+  --font-size-xl: 22px;
 
   // 堆叠顺序
   --zindex-mask: 1000;
   --zindex-popup: 1100;
   --zindex-tooltip: 1700;
+  --zindex-tabbar: 100;
 
   // 透明度
   --opacity-disabled: 0.5;
-  --opacity-mask: 0.5;
+  --opacity-mask: 0.4;
   --opacity-toast: 0.8;
   --opacity-tooltip: 0.8;
 
@@ -69,331 +72,285 @@
   --box-shadow-light: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
   --box-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.2);
 
-  // Components
+  // New Variables
 
-  // ActionSheet
-  --action-sheet-background: #fff;
-  --action-sheet-active-background: var(--background-active);
-  --action-sheet-margin: 0;
-  --action-sheet-item-height: 50px;
-  --action-sheet-item-font-size: 16px;
+  @include defineColorHSL(--za-theme-default, 0, 0%, 90%);
+  @include defineColorHSL(--za-theme-primary, 156, 100%, 36.9%);
+  @include defineColorHSL(--za-theme-success, 156, 100%, 36.9%);
+  @include defineColorHSL(--za-theme-warning, 31, 83.1%, 55.9%);
+  @include defineColorHSL(--za-theme-danger, 0, 100%, 65.7%);
 
-  // activity-indicator
-  --activity-indicator-size-md: 20px;
-  --activity-indicator-size-lg: 32px;
-  --activity-indicator-path-color: #e6e6e6;
-  --activity-indicator-spinner-color: #989697;
+  // 文字色
 
-  // Alert
-  --alert-button-height: 50px;
-  --alert-button-font-size: 18px;
-  --alert-button-background: var(--button-default-background);
-  --alert-button-active-background: var(--background-active);
+  --za-color-text: #343434;
+  --za-color-text-inverse: #fff; // 反色
+  --za-color-text-placeholder: rgba(128, 128, 132, 0.3); // 文本框提示
+  --za-color-text-disabled: #bcbcbc; // 失效
+  --za-color-text-caption: #909090; // 辅助描述
+  --za-color-link: var(--za-theme-primary); // 链接
+  --za-color-shadow: rgba(56, 56, 56, 0.15); // 阴影色
 
-  // Badge
-  --badge-height: 14px;
-  --badge-font-size: var(--font-size-xs);
-  --badge-padding-h: 4px;
-  --badge-dot-diameter: 8px;
-  --badge-border-radius-rect: var(--radius-sm);
-  --badge-border-radius-round: var(--radius-round);
-  --badge-sup-top: -4px;
-  --badge-text-color: #fff;
+  // 背景色
+  --za-background-color: #fff;
+  --za-background-active: #dbdbdd;
+  --za-background-disabled: #f2f2f2;
 
-  // Button
-  --button-height-xs: 28px;
-  --button-height-sm: 36px;
-  --button-height-md: 44px;
-  --button-height-lg: 52px;
-  --button-padding-h-xs: var(--padding-h-xs);
-  --button-padding-h-sm: var(--padding-h-sm);
-  --button-padding-h-md: var(--padding-h-md);
-  --button-padding-h-lg: var(--padding-h-lg);
-  --button-font-size-xs: 12px;
-  --button-font-size-sm: 14px;
-  --button-font-size-md: 16px;
-  --button-font-size-lg: 18px;
-  --button-icon-size-xs: 16px;
-  --button-icon-size-sm: 18px;
-  --button-icon-size-md: 22px;
-  --button-icon-size-lg: 26px;
-  --button-disabled-opacity: var(--opacity-disabled);
-  --button-disabled-color-ghost: var(--border-disabled);
-  --button-default-background: var(--color-text-inverse);
-  --button-default-border: var(--theme-default);
-  --button-default-color: var(--color-text);
-  --button-default-active-background: var(--background-active);
-  --button-default-active-border: var(--background-active);
-  --button-default-active-color: var(--color-text);
-  --button-default-ghost-border: var(--color-text-inverse);
-  --button-default-ghost-color: var(--color-text-inverse);
-  --button-default-ghost-active-border: var(--background-active);
-  --button-default-ghost-active-color: var(--background-active);
-  --button-default-shadow-color: rgba(230, 230, 230, 0.3);
-  --button-primary-background: var(--theme-primary);
-  --button-primary-border: var(--theme-primary);
-  --button-primary-color: var(--color-text-inverse);
-  --button-primary-active-background: var(--theme-primary-dark);
-  --button-primary-active-border: var(--theme-primary-dark);
-  --button-primary-active-color: rgba(255, 255, 255, 0.4);
-  --button-primary-ghost-border: var(--theme-primary);
-  --button-primary-ghost-color: var(--theme-primary);
-  --button-primary-ghost-active-border: var(--theme-primary-dark);
-  --button-primary-ghost-active-color: var(--theme-primary-dark);
-  --button-primary-shadow-color: rgba(0, 188, 112, 0.3);
-  --button-danger-background: var(--theme-danger);
-  --button-danger-border: var(--theme-danger);
-  --button-danger-color: var(--color-text-inverse);
-  --button-danger-active-background: var(--theme-danger-dark);
-  --button-danger-active-border: var(--theme-danger-dark);
-  --button-danger-active-color: rgba(255, 255, 255, 0.4);
-  --button-danger-ghost-border: var(--theme-danger);
-  --button-danger-ghost-color: var(--theme-danger);
-  --button-danger-ghost-active-border: var(--theme-danger-dark);
-  --button-danger-ghost-active-color: var(--theme-danger-dark);
-  --button-danger-shadow-color: rgba(255, 80, 80, 0.3);
+  // 边框色
+  --za-border-color: rgba(60, 60, 67, 0.36);
+  --za-border-disabled: #e6e6e6;
 
-  // Calendar
-  --calendar-height: 45px; // 最小高度
-  --calendar-background: #fff; // 背景色
-  --calendar-week-bar-fontsize: 14px; // 星期条文字大小
-  --calendar-week-bar-background: #f2f2f2; // 星期条文字背景色
-  --calendar-week-bar-color: var(--color-text-caption); // 星期条文字颜色
-  --calendar-section-padding: 15px; // 两边留白间距
-  --calendar-day-fontsize: 16px; // 月份文字大小
-  --calendar-day-title-fontsize: 17px; // 月份title文字大小
-  --calendar-day-color: var(--color-text); // 月份日期文字颜色
-  --calendar-day-today-background: var(--theme-primary-lighter); // 日期今天选中背景颜色
-  --calendar-day-today-color: var(--theme-primary); // 日期今天选中颜色
-  --calendar-day-selected-background: var(--theme-primary); // 日期文字选中背景颜色
-  --calendar-day-selected-color: #fff; // 日期文字选中颜色
-  --calendar-day-selected-shadow: var(--theme-primary-lighter);
-  --calendar-day-range-background: var(--theme-primary-lighter); // 日期文字范围内背景颜色
-  --calendar-day-range-color: var(--theme-primary); // 日期文字范围内颜色
-  --calendar-day-height: 40px; // 日期高度
+  // 圆角
+  --za-radius-xs: 4px;
+  --za-radius-sm: 4px;
+  --za-radius-md: 4px;
+  --za-radius-lg: 8px;
+  --za-radius-xl: 8px;
+  --za-radius-round: 1000px;
+  --za-radius-circle: 50%;
 
-  // Carousel
-  --carousel-pagination-distance: 8px;
-  --carousel-pagination-rect-width: 19px;
-  --carousel-pagination-rect-height: 4px;
-  --carousel-pagination-rect-border-radius: 1px;
-  --carousel-pagination-rect-step: 2px;
-  --carousel-pagination-rect-color: rgba(255, 255, 255, 0.6);
-  --carousel-pagination-rect-color-active: #fff;
+  // 水平间距
+  --za-padding-h-xs: 8px;
+  --za-padding-h-sm: 12px;
+  --za-padding-h-md: 16px;
+  --za-padding-h-lg: 20px;
+  --za-padding-h-xl: 24px;
 
-  // Cell
-  --cell-height: 52px;                                    // 最小高度
-  --cell-background: #fff;                              // 背景色
-  --cell-background-active: var(--background-active);     // 激活背景色
-  --cell-line-padding-left: 16px;                         // 分隔线左边距
-  --cell-padding-h: 16px;                                 // 水平边内距
-  --cell-padding-v: 15px;                                 // 纵向边内距
-  --cell-title-color: var(--color-text);                  // 标题文字颜色
-  --cell-title-font-size: 15px;                           // 标题文字大小
-  --cell-title-line-height: 22px;                         // 标题文字行高
-  --cell-description-color: var(--color-text-caption);    // 标题文字颜色
-  --cell-description-font-size: 15px;                     // 描述文字大小
-  --cell-label-width: 100px;                              // 表单label宽度
-  --cell-arrow-color: #bcbcbc;                          // 箭头颜色
-  --cell-arrow-length: 10px;                              // 箭头长度
-  --cell-arrow-border-width: 2px;                         // 箭头粗细
+  // 垂直间距
+  --za-padding-v-xs: 6px;
+  --za-padding-v-sm: 8px;
+  --za-padding-v-md: 12px;
+  --za-padding-v-lg: 16px;
+  --za-padding-v-xl: 18px;
 
-  // Checkbox
-  --checkbox-size: 18px;
-  --checkbox-radius: var(--radius-md);
-  --checkbox-background: var(--color-text-inverse);
-  --checkbox-border-color: var(--border-color);
-  --checkbox-active-border-color: var(--theme-primary);
-  --checkbox-disabled-background: var(--background-disabled);
-  --checkbox-disabled-color: #bcbcbc;
-  --checkbox-arrow-color: var(--color-text-inverse);
+  // 字体大小
+  --za-font-size-xs: 14px;
+  --za-font-size-sm: 14px;
+  --za-font-size-md: 17px;
+  --za-font-size-lg: 20px;
+  --za-font-size-xl: 22px;
+
+  // 堆叠顺序
+  --za-zindex-mask: 1000;
+  --za-zindex-popup: 1100;
+  --za-zindex-tooltip: 1700;
+  --za-zindex-tabbar: 100;
+
+  // 透明度
+  --za-opacity-disabled: 0.5;
+  --za-opacity-mask: 0.4;
+  --za-opacity-toast: 0.8;
+  --za-opacity-tooltip: 0.8;
+
+  //阴影
+  --za-box-shadow-light: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+  --za-box-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  // 动画
+  @include define(animation-duration-base, 0.2s);
 
   // Collapse
-  --collapse-height: 52px;
-  --collapse-padding-h: 16px;
-  --collapse-padding-v: 15px;
-  --collapse-arrow-color: #bcbcbc;
-  --collapse-arrow-disabled-color: #eee;
-
-  // Confirm
-  --confirm-button-height: 50px;
-  --confirm-button-font-size: 18px;
-  --confirm-button-background: var(--button-default-background);
-  --confirm-button-active-background: var(--background-active);
+  --za-collapse-height: 52px;
+  --za-collapse-padding-horizontal: 16px;
+  --za-collapse-padding-vertical: 15px;
+  --za-collapse-arrow-color: #bcbcbc;
+  --za-collapse-arrow-disabled-color: #eee;
 
   // Input
-  --input-clear-icon-width: 16px;
-  --input-clear-icon-color: #bcbcbc;
-  --input-padding-v: var(--cell-padding-v);
-  --input-cursor-color: #597cf6;
-  --input-cursor-width: 2px;
-  --input-cursor-height: calc(var(--cell-title-line-height) - 4px);
-  --input-length-count-color: var(--color-text-disabled);
-  --input-height: 28px;
-  --input-line-height: var(--cell-title-line-height);
-
-  // ImagePreview
-  --image-preview-origin-button-background: #2d2d2d;
-
-  // Keyboard
-  --keyboard-background: #fff;
-  --keyboard-item-background: #fff;
-  --keyboard-item-height: 52px;
-  --keyboard-item-font-size: 30px;
+  // 高度
+  --za-input-height: 28px;
+  // 行高
+  --za-input-line-height: 28px;
+  // 字体大小
+  --za-input-font-size: var(--font-size-md);
+  // 字体颜色
+  --za-input-color: var(--color-text);
+  // 占位符字体颜色
+  --za-input-placeholder-color: var(--color-text-placeholder);
+  // 清除按钮大小
+  --za-input-clear-icon-size: 16px;
+  // 清除按钮颜色
+  --za-input-clear-icon-color: #ccc;
+  // 虚拟光标颜色
+  --za-input-cursor-color: #597cf6;
+  // 虚拟光标线条宽度
+  --za-input-cursor-width: 2px;
+  // 虚拟光标线条高度
+  --za-input-cursor-height: 20px;
+  // 输入长度字体大小
+  --za-input-length-font-size: var(--font-size-sm);
+  // 输入长度字体颜色
+  --za-input-length-color: var(--color-text-disabled);
+  // 标签栏宽度
+  --za-input-label-width: 100px;
+  // 纵向标签栏字体大小
+  --za-input-vertical-label-font-size: var(--font-size-sm);
+  // 禁用状态字体颜色
+  --za-input-disabled-color: var(--color-text-disabled);
 
   // Loading
-  --loading-background: rgba(0, 0, 0, var(--opacity-toast));
+  --za-loading-background: rgba(0, 0, 0, var(--opacity-toast));
 
   // Message
-  --message-min-height-md: 29px;
-  --message-min-height-lg: 40px;
-  --message-font-size-md: 12px;
-  --message-font-size-lg: 14px;
-  --message-icon-size-md: 14px;
-  --message-icon-size-lg: 16px;
-  --message-padding-v-md: 6px;
-  --message-padding-h-md: 8px;
-  --message-padding-v-lg: 8px;
-  --message-padding-h-lg: 12px;
-
-  // Modal
-  --modal-background: #fff;
-  --modal-title-font-size: 18px;
-  --modal-title-color: var(--color-text);
-  --modal-close-color: #ccc;
-  --modal-close-active-color: #999;
+  --za-message-min-height: 29px;
+  --za-message-font-size: 12px;
+  --za-message-icon-size: 14px;
+  --za-message-padding-vertical: 6px;
+  --za-message-padding-horizontal: 8px;
 
   // NavBar
-  --nav-bar-color: #fdfdfd;
-  --nav-bar-height: 44px;
-  --nav-bar-icon-size: 24px;
+  // 背景色
+  --za-nav-bar-background: rgba(249, 249, 249, 0.94);
+  // 高度
+  --za-nav-bar-height: 44px;
+  // 标题字体色
+  --za-nav-bar-title-color: var(--color-text);
+  // 标题字体大小
+  --za-nav-bar-title-font-size: 17px;
+  // 标题字体粗细
+  --za-nav-bar-title-font-weight: 500;
+  // 左右栏字体大小
+  --za-nav-bar-side-font-size: 17px;
+  // 横向内边距
+  --za-nav-bar-padding-horizontal: 16px;
 
   // NoticeBar
-  --notice-bar-height: 24px;
+  --za-notice-bar-height: 24px;
+  --za-notice-bar-min-height: 40px;
+  --za-notice-bar-font-size: 14px;
+  --za-notice-bar-padding-vertical: 8px;
+  --za-notice-bar-padding-horizontal: 12px;
+  --za-notice-bar-icon-size: 16px;
 
   // Panel
-  --panel-header-color: var(--color-text-caption);
-  --panel-header-font-size: 14px;
-  --panel-body-color: var(--color-text);
-  --panel-body-font-size: 15px;
-  --panel-body-background: #fff;
+  // 左右留白宽度
+  --za-panel-spacing-padding-horizontal: 16px;
+  // 头部字体色
+  --za-panel-header-color: rgba(60, 60, 67, 0.6);
+  // 头部字体大小
+  --za-panel-header-font-size: 13px;
+  // 头部内边距
+  --za-panel-header-padding: 25px 16px 10px 16px;
+  // 内容背景
+  --za-panel-body-background: #fff;
+  // 内容圆角大小
+  --za-panel-body-border-radius: 10px;
 
   // Picker
-  --picker-background: #fff;
-  --picker-mask-background-start: rgba(255, 255, 255, 0.4);
-  --picker-mask-background-end: rgba(255, 255, 255, 0.8);
-  --picker-header-height: 45px;
-  --picker-header-font-size: 16px;
-  --picker-header-background: #f7f7f7;
+  --za-picker-background: #fff;
+  --za-picker-padding: 16px;
+  --za-picker-mask-background-start: rgba(255, 255, 255, 0.4);
+  --za-picker-mask-background-end: rgba(255, 255, 255, 0.8);
+  --za-picker-header-height: 45px;
+  --za-picker-header-font-size: 16px;
+  --za-picker-header-background: #f7f7f7;
+  --za-picker-item-selected-background: rgba(116, 116, 128, 0.08);
+  --za-picker-item-selected-border-radius: 7px;
 
   // Progress
-  --progress-background: #f2f2f2;
-  --progress-width-lg: 100%;
-  --progress-width-md: 100%;
-  --progress-width-sm: 140px;
-  --progress-size-lg: 200px;
-  --progress-size-md: 150px;
-  --progress-size-sm: 80px;
-  --progress-font-size-circle-lg: 30px;
-  --progress-font-size-circle-md: 24px;
-  --progress-font-size-circle-sm: 18px;
+  --za-progress-background: #f2f2f2;
+  --za-progress-width-lg: 100%;
+  --za-progress-width-md: 100%;
+  --za-progress-width-sm: 140px;
+  --za-progress-size-lg: 200px;
+  --za-progress-size-md: 150px;
+  --za-progress-size-sm: 80px;
+  --za-progress-font-size-circle-lg: 30px;
+  --za-progress-font-size-circle-md: 24px;
+  --za-progress-font-size-circle-sm: 18px;
 
   // Pull
   --pull-control-height: 50px;
   --pull-control-font-size: 14px;
 
-  // Radio
-  --radio-size: 18px;
-  --radio-radius: var(--radius-circle);
-  --radio-background: var(--color-text-inverse);
-  --radio-border-color: var(--border-color);
-  --radio-active-border-color: var(--theme-primary);
-  --radio-disabled-background: var(--background-disabled);
-  --radio-disabled-color: #bcbcbc;
-  --radio-arrow-color: var(--color-text-inverse);
-
   // SearchBar
-  --search-bar-font-size: 14px;
-  --search-bar-background: #fff;
-  --search-bar-inner-background: #f2f2f2;
-
-  // Slider
-  --slider-line-background: var(--border-color);
-  --slider-line-height: 2px;
-  --slider-line-dot-width: 6px;
-  --slider-line-dot-color: #fff;
-  --slider-vertical-line-width: 2px;
-  --slider-handle-size: 24px;
-  --slider-handle-size-small: 16px;
-  --slider-mark-handle: 24px;
-  --slider-mark-size: 15px;
-  --slider-handle-background: #fff;
-  --slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  // 高度
+  --za-search-bar-height: 52px;
+  // 背景色
+  --za-search-bar-background: transparent;
+  // 左右留白内边距
+  --za-search-bar-padding-horizontal: 16px;
+  // 输入框高度
+  --za-search-bar-input-height: 36px;
+  // 输入框字体大小
+  --za-search-bar-input-font-size: 17px;
+  // 输入框背景色
+  --za-search-bar-input-background: rgba(118, 118, 128, 0.12);
+  // 输入框圆角大小
+  --za-search-bar-input-border-radius: 10px;
+  // 输入框内边距
+  --za-search-bar-input-padding-horizontal: 8px;
+  // 输入框占位符颜色
+  --za-search-bar-input-placeholder-color: #808084;
+  // 输入框清除图标颜色
+  --za-search-bar-input-clear-icon-color: #8e8e92;
+  // 输入框图标颜色
+  --za-search-bar-icon-color: #808084;
+  // 输入框图标右边距
+  --za-search-bar-icon-margin-right: 6px;
+  // 取消按钮字体大小
+  --za-search-bar-cancel-font-size: 17px;
+  // 取消按钮字体颜色
+  --za-search-bar-cancel-color: var(--theme-primary);
+  // 取消按钮左边距
+  --za-search-bar-cancel-margin-left: 13px;
+  // 取消按钮动画
+  --za-search-bar-cancel-transition: all .2s;
 
   // Stepper
-  --stepper-input-background: #fff;
-  --stepper-height-md: 28px;
-  --stepper-height-lg: 36px;
-  --stepper-icon-font-size-md: 12px;
-  --stepper-icon-font-size-lg: 14px;
-  --stepper-input-width-md: 50px;
-  --stepper-input-width-lg: 60px;
-  --stepper-input-disabled: var(--color-text-disabled);
-  --stepper-input-font-size-md: 14px;
-  --stepper-input-font-size-lg: 16px;
-  --stepper-input-margin-h-md: 4px;
-  --stepper-input-margin-h-lg: 4px;
-  --stepper-input-padding-h-md: 8px;
-  --stepper-input-padding-h-lg: 8px;
+  --za-stepper-input-background: #fff;
+  --za-stepper-height-md: 28px;
+  --za-stepper-height-lg: 36px;
+  --za-stepper-icon-font-size-md: 12px;
+  --za-stepper-icon-font-size-lg: 14px;
+  --za-stepper-input-width-md: 50px;
+  --za-stepper-input-width-lg: 60px;
+  --za-stepper-input-disabled: var(--color-text-disabled);
+  --za-stepper-input-font-size-md: 14px;
+  --za-stepper-input-font-size-lg: 16px;
+  --za-stepper-input-margin-horizontal-md: 4px;
+  --za-stepper-input-margin-horizontal-lg: 4px;
+  --za-stepper-input-padding-horizontal-md: 8px;
+  --za-stepper-input-padding-horizontal-lg: 8px;
 
-  // Switch
-  --switch-width: 53px;
-  --switch-height: 32px;
-  --switch-handle-size: 26px;
-  // --switch-width-sm: 41px;
-  // --switch-height-sm: 21px;
-  --switch-border-color: var(--border-color);
-  --switch-background: var(--border-color);
-  --switch-handle-background: #fff;
   // Tabs
-  --tabs-height: 45px;
-  --tabs-item-font-size: var(--font-size-lg);
-  --tabs-line-height: 2px;
-  --tabs-item-horizontal-padding: 20px;
-  --tabs-item-vertical-padding: 12px;
+  --za-tabs-height: 45px;
+  --za-tabs-line-height: 2px;
+  --za-tabs-item-font-size: var(--font-size-md);
+  --za-tabs-item-padding-horizontal: 20px;
+  --za-tabs-item-padding-vertical: 12px;
 
   // Toast
-  --toast-border-radius: 6px;
-  --toast-background: rgba(0, 0, 0, var(--opacity-toast));
-  --toast-color: var(--color-text-inverse);
-  --toast-font-size: 13px;
+  --za-toast-border-radius: 6px;
+  --za-toast-background: rgba(0, 0, 0, var(--opacity-toast));
+  --za-toast-color: var(--color-text-inverse);
+  --za-toast-font-size: 13px;
 
   // Tooltip
-  --tooltip-font-size: 12px;
-  --tooltip-color: var(--color-text-inverse);
-  --tooltip-arrow-size: 4px;
-  --tooltip-padding-v: var(--padding-v-xs);
-  --tooltip-padding-h: var(--padding-h-xs);
-  --tooltip-background: rgba(0, 0, 0, var(--opacity-tooltip));
+  --za-tooltip-font-size: 12px;
+  --za-tooltip-color: var(--color-text-inverse);
+  --za-tooltip-arrow-size: 4px;
+  --za-tooltip-padding-vertical: var(--padding-v-xs);
+  --za-tooltip-padding-horizontal: var(--padding-h-xs);
+  --za-tooltip-background: rgba(0, 0, 0, var(--opacity-tooltip));
 
   // Tabbar
-  --tabbar-height: 50px;
-  --tabbar-hidden-bottom: -50px;
-  --tabbar-background: #fff;
-  --tabbar-item-font-size: 12px;
-  --tabbar-item-active-color: var(--theme-primary);
+  --za-tabbar-height: 50px;
+  --za-tabbar-hidden-bottom: -50px;
+  --za-tabbar-background: #fff;
+  --za-tabbar-item-font-size: 12px;
+  --za-tabbar-item-active-color: var(--theme-primary);
 
   // Wheel
-  --wheel-item-height: 34px;
-  --wheel-item-rows: 5;
-  --wheel-item-font-size: 18px;
-  --wheel-color: var(--color-text);
+  --za-wheel-item-height: 34px;
+  --za-wheel-item-rows: 5;
+  --za-wheel-item-font-size: 20px;
+  --za-wheel-color: var(--color-text);
 
   // Icon
-  --icon-font-size-sm: 16px;
-  --icon-font-size-md: 24px;
-  --icon-font-size-lg: 32px;
-  --icon-theme-default: var(--color-text);
+  --za-icon-font-size-sm: 16px;
+  --za-icon-font-size-md: 24px;
+  --za-icon-font-size-lg: 32px;
+  --za-icon-theme-default: var(--color-text);
 
   // StackPicker
   --stack-picker-background: #fff;

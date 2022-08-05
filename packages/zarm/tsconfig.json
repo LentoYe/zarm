@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "zarm": ["src/index.tsx"],
-      "zarm/es/*": ["src/*"]
-    },
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
@@ -12,7 +8,7 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "target": "ES2019",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "types": ["react", "react-dom", "react-native", "node", "jest"]

@@ -4,7 +4,6 @@ import { pascalCase } from 'change-case';
 export default ({ code, component, preview }) => {
   const title = `${component.name} ${pascalCase(component.key)} - Zarm Design`;
   const pageCls = `${component.key}-page`;
-  
   let parsedSourceCode = code;
   let importReactContent = "import React from 'react';";
 
@@ -15,10 +14,7 @@ export default ({ code, component, preview }) => {
     parsedSourceCode = parsedSourceCode.replace(importReactReg, '').trim();
   }
 
-  parsedSourceCode = parsedSourceCode.replace(
-    'mountNode',
-    "document.getElementById('container')",
-  );
+  parsedSourceCode = parsedSourceCode.replace('mountNode', "document.getElementById('container')");
 
   const indexJsContent = `
 ${importReactContent}
@@ -69,8 +65,12 @@ ${parsedSourceCode}
   };
 
   if (component.style) {
-    // eslint-disable-next-line import/no-dynamic-require
-    config.files['index.css'] = { content: require(`!!raw-loader!sass-loader!@/demo/styles/${pascalCase(component.key)}Page.scss`).default };
+    config.files['index.css'] = {
+      // eslint-disable-next-line import/no-dynamic-require
+      content: require(`!!raw-loader!sass-loader!@/demo/styles/${pascalCase(
+        component.key,
+      )}Page.scss`).default,
+    };
   }
 
   const params = getParameters(config);
@@ -86,4 +86,4 @@ ${parsedSourceCode}
     </form>
     ${preview}
   </div>`;
-}
+};

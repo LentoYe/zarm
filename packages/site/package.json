@@ -19,6 +19,8 @@
   "dependencies": {
     "@zarm-design/icons": "^0.1.4",
     "classnames": "2.2.6",
+    "f2-touchemulator": "^0.0.1",
+    "qrcode.react": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.0.0",
@@ -34,7 +36,7 @@
     "@types/classnames": "^2.2.3",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
-    "@zarm-design/cli": "^0.0.39",
+    "@zarm-design/cli": "^0.0.40",
     "babel-plugin-import": "^1.13.0",
     "babel-plugin-prismjs": "^2.0.1",
     "browserslist": "^4.6.6",
@@ -46,7 +48,7 @@
     "history": "^5.0.0",
     "marked": "^4.0.10",
     "prismjs": "^1.23.0",
-    "qrious": "^4.0.2",
-    "raw-loader": "^4.0.1"
+    "raw-loader": "^4.0.1",
+    "resolve-url-loader": "^5.0.0"
   }
 }

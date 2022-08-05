@@ -1,171 +1,189 @@
-import React, { PureComponent, CSSProperties, ReactElement } from 'react';
+import * as React from 'react';
 import classnames from 'classnames';
-import PropsType from './PropsType';
-import TabPanel, { TabPanelProps } from './TabPanel';
+import TabPanel from './TabPanel';
 import Carousel from '../carousel';
+import type { CarouselHTMLElement } from '../carousel';
 import { getTransformPropValue, getPxStyle } from './util/index';
 import { scrollTo } from '../utils/dom';
+import { ConfigContext } from '../n-config-provider';
+import type { TabPanelProps } from './TabPanel';
+import type { BaseTabsProps } from './interface';
 
-export interface TabsProps extends PropsType {
-  prefixCls?: string;
-  className?: string;
-}
-
-interface TabsStates {
-  value: number;
-  prevValue?: number;
-  itemWidth: number;
-}
-
-const getSelectIndex = (children) => {
+const getChildChecked = (children: TabPanelProps['children']) => {
   let selectIndex;
   React.Children.forEach(children, (item, index) => {
-    if (item.props && item.props.selected) {
+    if (React.isValidElement(item) && item.props && item.props.selected) {
       selectIndex = index;
     }
   });
   return selectIndex;
 };
 
-export default class Tabs extends PureComponent<TabsProps, TabsStates> {
-  static Panel: typeof TabPanel;
+const parseValueBoundary = (
+  inputValue: TabsProps['value'],
+  children: TabPanelProps['children'],
+) => {
+  const count = React.Children.count(children);
+  if (inputValue! <= 0) {
+    return 0;
+  }
+  if (inputValue! > count - 1) {
+    return count - 1;
+  }
+  return inputValue;
+};
 
-  private carousel?: Carousel;
+const getValue = (props: TabsProps, defaultValue: TabsProps['value']) => {
+  if (typeof props.value !== 'undefined') {
+    return parseValueBoundary(props.value, props.children);
+  }
+  if (typeof props.defaultValue !== 'undefined') {
+    return parseValueBoundary(props.defaultValue, props.children);
+  }
+  if (getChildChecked(props.children)) {
+    return parseValueBoundary(getChildChecked(props.children), props.children);
+  }
+  return parseValueBoundary(defaultValue, props.children);
+};
 
-  private layout?: HTMLUListElement;
+export interface TabsProps extends BaseTabsProps {
+  className?: string;
+}
 
-  static defaultProps = {
-    prefixCls: 'za-tabs',
-    disabled: false,
-    swipeable: false,
-    scrollable: false,
-    direction: 'horizontal',
-  };
+interface CompoundedComponent
+  extends React.ForwardRefExoticComponent<TabsProps & React.RefAttributes<HTMLDivElement>> {
+  Panel: typeof TabPanel;
+}
 
-  constructor(props: Tabs['props']) {
-    super(props);
-    this.state = {
-      value: props.value || props.defaultValue || getSelectIndex(props.children) || 0,
-      itemWidth: 0,
+const Tabs = React.forwardRef<unknown, TabsProps>((props, ref) => {
+  const {
+    className,
+    value,
+    defaultValue,
+    disabled,
+    swipeable,
+    scrollable,
+    direction,
+    lineWidth,
+    onChange,
+    children,
+  } = props;
+
+  const tabsRef = (ref as any) || React.createRef<HTMLDivElement>();
+  const carouselRef = React.useRef<CarouselHTMLElement>(null);
+  const tablistRef = React.useRef<HTMLUListElement>(null);
+  const [itemWidth, setItemWidth] = React.useState(0);
+  const [currentValue, setCurrentValue] = React.useState(
+    getValue({ value, defaultValue, children }, 0),
+  );
+
+  const { prefixCls: globalPrefixCls } = React.useContext(ConfigContext);
+  const prefixCls = `${globalPrefixCls}-tabs`;
+
+  const isVertical: boolean = direction === 'vertical';
+
+  const parseValue = React.useCallback((inputValue) => parseValueBoundary(inputValue, children), [
+    children,
+  ]);
+
+  const cls = classnames(prefixCls, className, `${prefixCls}--${direction}`, {
+    [`${prefixCls}--scroll`]: scrollable,
+  });
+
+  // 计算 line 大小和位置
+  const caclLineSizePos = () => {
+    const newValue = parseValue(currentValue)!;
+    const ChildCount = React.Children.count(children);
+
+    let pos = 100 * newValue;
+    if (scrollable && tablistRef.current) {
+      const el = tablistRef.current.children[newValue];
+      const { offsetLeft = 0, offsetTop = 0 } = el as HTMLElement;
+      pos = isVertical ? offsetTop : offsetLeft;
+    }
+
+    const size = scrollable ? `${itemWidth}px` : `${100 / ChildCount}%`;
+    const transformValue = scrollable
+      ? getPxStyle(pos, 'px', isVertical)
+      : getPxStyle(pos, '%', isVertical);
+    const styleUl = getTransformPropValue(transformValue);
+    const itemSize = isVertical ? { height: `${size}` } : { width: `${size}` };
+
+    return {
+      ...styleUl,
+      ...itemSize,
     };
-  }
-
-  static getDerivedStateFromProps(nextProps: Tabs['props'], state: Tabs['state']) {
-    if ('value' in nextProps && nextProps.value !== state.prevValue) {
-      return {
-        value: nextProps.value,
-        prevValue: nextProps.value,
-      };
-    }
-    return null;
-  }
-
-  componentDidMount() {
-    const { children } = this.props;
-    if (React.Children.count(children)) {
-      this.calculateLineWidth();
-      this.calculateScorllLeftLocation();
-    }
-  }
-
-  componentDidUpdate(prevstate) {
-    const { value: prevValue, children: prevChild } = prevstate;
-    const { value } = this.state;
-    const { children } = this.props;
-    if (prevValue !== value || prevChild !== children) {
-      this.calculateLineWidth();
-    }
-    this.calculateScorllLeftLocation();
-  }
-
-  get isVertical() {
-    const { direction } = this.props;
-    return direction === 'vertical';
-  }
-
-  get currentValue() {
-    const { value } = this.state;
-    const { children } = this.props;
-    const count = React.Children.count(children);
-    if (value < 0) {
-      return 0;
-    }
-    if (value > count - 1) {
-      return count - 1;
-    }
-    return value;
-  }
-
-  setTablistRef = (ref: HTMLUListElement) => {
-    this.layout = ref;
   };
 
-  setCarouselRef = (ref: Carousel) => {
-    this.carousel = ref;
-  };
+  const onTabChange = React.useCallback(
+    (newValue: number) => {
+      if (typeof value === 'undefined') {
+        setCurrentValue(newValue);
+      }
+      typeof onChange === 'function' && onChange(newValue);
+    },
+    [value, onChange],
+  );
 
-  onTabChange = (value: number) => {
-    const { onChange } = this.props;
-    if (!('value' in this.props)) {
-      this.setState({ value });
-    }
-    typeof onChange === 'function' && onChange(value);
-  };
-
-  onTabClick = (tab: ReactElement<TabPanel['props'], typeof TabPanel>, index: number) => {
-    const { disabled, swipeable } = this.props;
+  const onTabClick = (tab: React.ReactElement<TabPanelProps, typeof TabPanel>, index: number) => {
     if (disabled || tab.props.disabled) {
       return;
     }
     if (swipeable) {
-      this.carousel && this.carousel.onSlideTo(index);
+      carouselRef.current && carouselRef.current!.onSlideTo(index);
       return;
     }
-    this.onTabChange(index);
+    onTabChange(index);
   };
 
-  renderTabs = (tab: ReactElement<TabPanelProps, typeof TabPanel>, index: number) => {
-    if (!tab) {
-      return;
-    }
-    const { prefixCls, disabled } = this.props;
-    const { value } = this.state;
+  const lineStyle: React.CSSProperties = caclLineSizePos();
+  let lineInnerRender;
+  if (lineWidth) {
+    lineStyle.backgroundColor = 'transparent';
+    lineInnerRender = <span className={`${prefixCls}__line__inner`} style={{ width: lineWidth }} />;
+  }
 
+  // 渲染内容
+  let contentRender;
+  if (swipeable) {
+    contentRender = (
+      <Carousel
+        swipeable={!disabled}
+        direction={direction === 'vertical' ? 'up' : 'left'}
+        showPagination={false}
+        activeIndex={parseValue(currentValue)}
+        ref={carouselRef}
+        onChange={onTabChange}
+      >
+        {React.Children.map(children, (item: any, index: number) => (
+          <div key={+index}>{item.props.children}</div>
+        ))}
+      </Carousel>
+    );
+  } else {
+    contentRender = React.Children.map(
+      children,
+      (item: React.ReactElement<TabPanelProps, typeof TabPanel>, index: number) => (
+        <TabPanel {...item.props} selected={parseValue(currentValue) === index} />
+      ),
+    );
+  }
+
+  const renderTabs = (tab: React.ReactElement<TabPanelProps, typeof TabPanel>, index: number) => {
     const itemCls = classnames(`${prefixCls}__tab`, tab.props.className, {
       [`${prefixCls}__tab--disabled`]: disabled || tab.props.disabled,
-      [`${prefixCls}__tab--active`]: value === index,
+      [`${prefixCls}__tab--active`]: parseValue(currentValue) === index,
     });
+
     return (
-      <li role="tab" key={+index} className={itemCls} onClick={() => this.onTabClick(tab, index)}>
+      <li role="tab" key={+index} className={itemCls} onClick={() => onTabClick(tab, index)}>
         {tab.props.title}
       </li>
     );
   };
 
-  /**
-   * @description: 计算 line 大小和位置
-   */
-  caclLineSizePos = () => {
-    const { itemWidth } = this.state;
-    const value = this.currentValue;
-    const { children, scrollable } = this.props;
-    let ChildCount = React.Children.count(children);
-    if (Array.isArray(children)) {
-      ChildCount = children.filter((i) => i).length;
-    }
-    let pos = 100 * value;
-    if (scrollable && this.layout) {
-      const el = this.layout!.children[value];
-      const { offsetLeft = 0, offsetTop = 0 } = el as HTMLElement;
-      pos = this.isVertical ? offsetTop : offsetLeft;
-    }
-
-    const size = scrollable ? `${itemWidth}px` : `${100 / ChildCount}%`;
-    const transformValue = scrollable
-      ? getPxStyle(pos, 'px', this.isVertical)
-      : getPxStyle(pos, '%', this.isVertical);
-    const styleUl = getTransformPropValue(transformValue);
-    const itemSize = this.isVertical ? { height: `${size}` } : { width: `${size}` };
+  // 渲染选项
+  const tabsRender = React.Children.map(children, renderTabs);
 
     return {
       ...styleUl,
@@ -193,108 +211,66 @@ export default class Tabs extends PureComponent<TabsProps, TabsStates> {
 
       scrollTo(this.layout, top, left, 0.3);
     }
+    return newValue;
   };
 
-  calculateLineWidth = () => {
-    const { scrollable } = this.props;
+  const calculateLineWidth = React.useCallback(() => {
     if (!scrollable) {
       return;
     }
-    const value = this.currentValue;
-    const el = this.layout!.children[value];
-    const size = this.isVertical
-      ? this.getComputedStyle(el, 'height')
-      : this.getComputedStyle(el, 'width');
+    const newValue = parseValue(currentValue)!;
+    const el = tablistRef.current!.children[newValue];
+    const size = isVertical ? getItemStyle(el, 'height') : getItemStyle(el, 'width');
 
-    this.setState({
-      itemWidth: parseInt(size, 10),
-    });
-  };
+    setItemWidth(parseInt(size.toString(), 10));
+  }, [parseValue, currentValue, isVertical, scrollable]);
 
-  getComputedStyle = (el, prop) => {
-    let value = '0';
-    if (prop in el.style) {
-      value = el.style[prop] || getComputedStyle(el).getPropertyValue(prop) || '0';
+  const calculateScorllLeftLocation = React.useCallback(() => {
+    if (!scrollable) {
+      return false;
     }
-    return value;
-  };
-
-  render() {
-    const {
-      prefixCls,
-      className,
-      lineWidth,
-      swipeable,
-      children,
-      disabled,
-      scrollable,
-      direction,
-    } = this.props;
-    const value = this.currentValue;
-    const classes = classnames(prefixCls, className, `${prefixCls}--${direction}`, {
-      [`${prefixCls}--scroll`]: scrollable,
-    });
-
-    // 渲染选项
-    let _children = children;
-    if (Array.isArray(_children)) {
-      _children = _children.filter((i) => i);
+    const newValue = parseValue(currentValue)!;
+    const index = newValue - 1 >= 0 ? newValue - 1 : 0;
+    const prevTabItem = tablistRef.current!.childNodes[index];
+    if (scrollable && tablistRef.current && prevTabItem) {
+      const { offsetTop: top = 0, offsetLeft: left = 0 } = prevTabItem as HTMLElement;
+      scrollTo(tablistRef.current, top, left, 0.3);
     }
-    const tabsRender = React.Children.map(_children, this.renderTabs);
+  }, [parseValue, currentValue, scrollable]);
 
-    // 渲染内容
-    let contentRender;
-
-    if (swipeable) {
-      contentRender = (
-        <Carousel
-          swipeable={!disabled}
-          direction={direction === 'vertical' ? 'up' : 'left'}
-          showPagination={false}
-          activeIndex={value}
-          ref={this.setCarouselRef}
-          onChange={(v: number) => {
-            this.onTabChange(v);
-          }}
-        >
-          {React.Children.map(children, (item: any, index: number) => (
-            <div key={+index}>{item.props.children}</div>
-          ))}
-        </Carousel>
-      );
-    } else {
-      contentRender = React.Children.map(
-        _children,
-        (item: ReactElement<TabPanel['props'], typeof TabPanel>, index) => {
-          return (
-            item && item.props.children && <TabPanel {...item.props} selected={value === index} />
-          );
-        },
-      );
+  React.useEffect(() => {
+    if (React.Children.count(children)) {
+      calculateLineWidth();
+      calculateScorllLeftLocation();
     }
+  }, [calculateLineWidth, calculateScorllLeftLocation, children]);
 
-    const lineStyle: CSSProperties = this.caclLineSizePos();
+  React.useEffect(() => {
+    setCurrentValue(getValue({ value, defaultValue, children }, 0));
+  }, [value, defaultValue, children]);
 
-    let lineInnerRender;
-    if (lineWidth) {
-      lineStyle.backgroundColor = 'transparent';
-      lineInnerRender = (
-        <span className={`${prefixCls}__line__inner`} style={{ width: lineWidth }} />
-      );
-    }
-
-    return (
-      <div className={classes}>
-        <div className={`${prefixCls}__header`}>
-          <ul className={`${prefixCls}__tablist`} role="tablist" ref={this.setTablistRef}>
-            {tabsRender}
-            <div className={`${prefixCls}__line`} style={lineStyle}>
-              {lineInnerRender}
-            </div>
-          </ul>
-        </div>
-        <div className={`${prefixCls}__body`}>{contentRender}</div>
+  return (
+    <div className={cls} ref={tabsRef}>
+      <div className={`${prefixCls}__header`}>
+        <ul className={`${prefixCls}__tablist`} role="tablist" ref={tablistRef}>
+          {tabsRender}
+          <div className={`${prefixCls}__line`} style={lineStyle}>
+            {lineInnerRender}
+          </div>
+        </ul>
       </div>
-    );
-  }
-}
+      <div className={`${prefixCls}__body`}>{contentRender}</div>
+    </div>
+  );
+}) as CompoundedComponent;
+
+Tabs.displayName = 'Tabs';
+
+Tabs.defaultProps = {
+  disabled: false,
+  swipeable: false,
+  scrollable: false,
+  direction: 'horizontal',
+};
+
+export default Tabs;
